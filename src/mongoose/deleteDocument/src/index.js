@@ -28,8 +28,8 @@ const deleteDoc= async()=>{
 
     try {
  
-        const result =await  UserModel.findByIdAndDelete("6556fe6c1ca4d2a77613b4fb")
-       
+        const result =await  UserModel.findByIdAndDelete("65574cc0a8df7883456500da")//return instance of object
+        // console.log(result)
         console.log(JSON.stringify(result,null,2))
         
     } catch (error) {

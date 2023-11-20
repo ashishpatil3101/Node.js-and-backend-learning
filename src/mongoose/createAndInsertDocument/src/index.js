@@ -1,4 +1,12 @@
 const mongoose = require('mongoose');
+const express = require('express')
+
+const app = express();
+app.listen( 3000, ()=>{
+    console.log('server has started')
+})
+
+app.use( express.json());
 
 
 //connect to mongodb server create db ifnot exist
@@ -23,23 +31,60 @@ const UserModel = mongoose.model("User", userSChema);
 
 
 //create and insert document
-const createAndInsertNewDoc= async()=>{
+const createAndInsertNewDoc= async( req)=>{
 
     try{
-
+         
+        console.log( req.body)
         //create and insert 
         const newUserDocument = new UserModel({
-            name: "vabh aptil",
-            email: "patilONe@gmail.com"
+            name: req.body.name,
+            email: req.body.email
         });
 
         //insert
         const result = await newUserDocument.save();//async task so it returns instance of model 
-        console.log(result);
+        
+        return result;
     }
-    catch(err){
-        console.log(err);
+    catch(error){
+        console.log(error);
+
+        let err = new Error("not able to create the user");
+        err.statusCode = 400;
+        next(err);
     }
 
 }
-createAndInsertNewDoc();
+const errorHandler = (err, req,res, next)=>{
+
+    err.statusCode = err.statusCode || 500;
+
+    return res.status( err.statusCode ).json({
+        message: err.message,
+        error : err.message
+    })
+}
+
+app.post('/user',async (req, res)=>{
+
+    try {
+        console.log( req.body)
+        const result =  await createAndInsertNewDoc( req);
+
+        return res.status(201).json({
+            message: 'user saved succesfully',
+            data: result
+            
+        })
+    } catch (error) {
+        
+        let err = new Error("not able to create the user");
+        err.statusCode = 400;
+        next(err);
+
+    }
+} , errorHandler)
+
+
+// createAndInsertNewDoc();

@@ -31,6 +31,7 @@ const readDocWithSort= async()=>{
     try {
  
         const result =await  UserModel.find().sort( { name: -1})
+        // console.log(result)//returns instace model
        
         console.log(JSON.stringify(result,null,2))
         

@@ -29,9 +29,9 @@ const updateDoc= async()=>{
 
     try {
  
-        const result =await  UserModel.findOneAndUpdate({name: "vabh"},{ $set: {name : "vaibhav patil one"}},{new: true })
-       
-        console.log(JSON.stringify(result,null,2))
+        const result =await  UserModel.findOneAndUpdate({name: "vaibhav patil one"},{ $set: {name : "vaibhav patil one"}},{new: true });
+        //  console.log(result); // returns instance of object
+        console.log(JSON.stringify(result))
         
     } catch (error) {
         console.log(error)
