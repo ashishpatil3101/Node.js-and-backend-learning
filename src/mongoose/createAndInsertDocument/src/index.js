@@ -35,7 +35,7 @@ const createAndInsertNewDoc= async( req)=>{
 
     try{
          
-        console.log( req.body)
+        if( req.body.email == undefined) throw new Error('please provide email')
         //create and insert 
         const newUserDocument = new UserModel({
             name: req.body.name,
@@ -48,11 +48,7 @@ const createAndInsertNewDoc= async( req)=>{
         return result;
     }
     catch(error){
-        console.log(error);
-
-        let err = new Error("not able to create the user");
-        err.statusCode = 400;
-        next(err);
+        throw error;
     }
 
 }
@@ -61,12 +57,12 @@ const errorHandler = (err, req,res, next)=>{
     err.statusCode = err.statusCode || 500;
 
     return res.status( err.statusCode ).json({
-        message: err.message,
+        success: false,
         error : err.message
     })
 }
 
-app.post('/user',async (req, res)=>{
+app.post('/user',async (req, res,next)=>{
 
     try {
         console.log( req.body)
