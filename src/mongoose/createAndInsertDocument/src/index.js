@@ -35,7 +35,7 @@ const createAndInsertNewDoc= async( req)=>{
 
     try{
          
-        if( req.body.email == undefined) throw new Error('please provide email')
+        if( Object.keys(req.body).length === 0) throw new Error('please provide user info')
         //create and insert 
         const newUserDocument = new UserModel({
             name: req.body.name,

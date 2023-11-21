@@ -1,0 +1,1 @@
+// res.send(name, value, options)  //used to send cookie
