@@ -17,13 +17,14 @@ const userScheme = new mongoose.Schema({
 //instance method to create the token
 userScheme.methods.createToken = async function(){
     
-     console.log(process.env.SECRET_KEY)
+     
      this.tokens = await jwt.sign({_id: this._id}, process.env.SECRET_KEY);
 }
 
 userScheme.pre("save",async function ( next ){
     
   if (this.isModified('password')) {
+    console.log("ismodifiled")
     const hashedPass = await bcrypt.hash( this.password ,10);
     this.password = hashedPass;
   }

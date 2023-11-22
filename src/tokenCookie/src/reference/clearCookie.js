@@ -1,0 +1,1 @@
+//res.clearCookie('cookieNAme') => will clear cookie on client side

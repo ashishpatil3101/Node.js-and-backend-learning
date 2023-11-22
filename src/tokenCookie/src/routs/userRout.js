@@ -3,8 +3,12 @@ const path= require('path')
 const User= require('../model/user')
 const rout= express.Router();
 const bcrypt =  require('bcrypt')
+const auth = require('../middleware/auth');
 
-const  {createToken}= require('../jsonwebTokenRefrence')
+
+const  {createToken}= require('../reference/jsonwebTokenRefrence')
+
+// rout.use(cookieParser());//imp 
 
 
 //rout
@@ -51,7 +55,7 @@ rout.post('/login', async (req, res) => {
       // Find the user in the database
       const user = await User.findOne({ email });
       const isPasswordMatch = await bcrypt.compare( password, user.password );
-     console.log(isPasswordMatch,password,user)
+      // console.log(isPasswordMatch,user)
       // Check if the password matches
       if (user && isPasswordMatch ) {
 
@@ -60,7 +64,7 @@ rout.post('/login', async (req, res) => {
         await user.save();
     
         //send token as cookie
-        // res.cookie('jwt', user.tokens)
+        res.cookie('jwt', user.tokens,{maxAge: 300000,httpOnly: true})
          
 
         //send response to user
@@ -76,6 +80,43 @@ rout.post('/login', async (req, res) => {
       res.status(500).send('Error logging in');
     }
   });
+
+//userinfo rout
+rout.get('/userinfo',auth, (req,res)=>{
+
+
+  try {
+    
+
+    const filePath = path.join(__dirname, '../public/userInfo.html');
+    res.sendFile(filePath);   
+  
+  } 
+  catch (error) {
+    res.status(401).send({
+        success: false,
+        error: error.message
+    })
+  }
+})
+
+
+//user logout
+rout.get('/logout', auth, async (req, res)=>{
+
+    try {
+        
+        await res.clearCookie('jwt');//clear the cookie client side not in db
+        req.user.tokens = "";
+        await req.user.save();
+        res.redirect('/login')
+    } 
+    catch (error) {
+        res.status(400).json({
+            message: "unable to logout"
+        })
+    }
+})
 
 
 module.exports = rout
