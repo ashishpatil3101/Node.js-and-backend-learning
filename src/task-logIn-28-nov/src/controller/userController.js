@@ -35,6 +35,9 @@ const  registerUser = async( req, res)=>{
     }
 }
 
+// @param {Object} req - The request object containing user data in the request body.
+// userName, password
+//after verfring token is created and send to the user
 const loginUser = async( req, res)=>{
 
     try {
@@ -69,6 +72,8 @@ const loginUser = async( req, res)=>{
   
 }
 
+
+//process request after verifying the token
 const getUserInfo = async( req, res )=>{
 
     try{
