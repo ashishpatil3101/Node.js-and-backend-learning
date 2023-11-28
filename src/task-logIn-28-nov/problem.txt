@@ -1,0 +1,13 @@
+build rout for specific functionality using MVC architecture
+
+rout 1 => user should log in with his credentials
+   rout info => 1 ) credentials => userID ,pass
+          2 ) send jwt token as cookie
+
+
+rout 2 ) getProfile - should send all user info
+    rout info => 1 ) should use authentication using jwt 
+                 2 ) send all user info 
+    
+
+         
